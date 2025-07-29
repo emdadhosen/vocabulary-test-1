@@ -1,0 +1,699 @@
+/* Define CSS Variables for theming */
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --primary-button-bg: #4f46e5;
+            --primary-button-hover: #4338ca;
+            --primary-button-shadow: rgba(79, 70, 229, 0.3);
+            --success-color: #22c55e;
+            --success-hover: #16a34a;
+            --success-shadow: rgba(34, 197, 94, 0.4);
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --danger-shadow: rgba(239, 68, 68, 0.3);
+            --info-color: #3b82f6;
+            --info-hover: #2563eb;
+            --info-shadow: rgba(59, 130, 246, 0.3);
+            --warning-color: #f59e0b;
+            --warning-hover: #d97706;
+            --warning-shadow: rgba(245, 158, 11, 0.3);
+            --quiz-timer-bg: #fee2e2;
+            --quiz-timer-text: #ef4444;
+            --input-border: #cbd5e0;
+            --input-focus-shadow: rgba(59, 130, 246, 0.25);
+            --list-item-bg: #f7fafc;
+            --list-item-border: #e2e8f0;
+            --placeholder-text: #a0aec0;
+            --mcq-question-font-size: 1.0rem; /* Default font size for MCQ questions (10% on slider) */
+        }
+
+        /* Dark mode variables */
+        body.dark-mode {
+            --bg-color: #1a202c;
+            --text-color: #e2e8f0; /* Adjusted for better visibility */
+            --card-bg: #2d3748;
+            --border-color: #4a5568;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --primary-button-bg: #667eea;
+            --primary-button-hover: #5a67d8;
+            --primary-button-shadow: rgba(102, 126, 234, 0.4);
+            --success-color: #48bb78;
+            --success-hover: #38a169;
+            --success-shadow: rgba(72, 187, 120, 0.4);
+            --danger-color: #f56565;
+            --danger-hover: #e53e3e;
+            --danger-shadow: rgba(245, 101, 101, 0.3);
+            --info-color: #63b3ed;
+            --info-hover: #4299e1;
+            --info-shadow: rgba(99, 179, 237, 0.3);
+            --warning-color: #ecc94b;
+            --warning-hover: #d69e2e;
+            --warning-shadow: rgba(236, 201, 75, 0.3);
+            --quiz-timer-bg: #4a5568;
+            --quiz-timer-text: #f56565;
+            --input-border: #6b7280;
+            --input-focus-shadow: rgba(99, 179, 237, 0.25);
+            --list-item-bg: #4a5568;
+            --list-item-border: #6b7280;
+            --placeholder-text: #a0aec0;
+        }
+
+
+        /* Base styles using variables */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            padding: 2.5rem;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 500px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-text {
+            color: var(--text-color);
+            font-size: var(--mcq-question-font-size); /* Use the CSS variable for font size */
+        }
+
+        .options-container {
+            gap: 1rem;
+        }
+
+        .option-button {
+            background-color: var(--border-color);
+            color: var(--text-color);
+            padding: 1rem 1.5rem; /* Medium size */
+            border-radius: 0.75rem; /* Rounded corners */
+            font-size: 1.125rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Proper shadow */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .option-button:hover:not(.selected):not(.correct):not(.incorrect) {
+            background-color: var(--input-border);
+            transform: translateY(-2px); /* Subtle lift */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+        }
+
+        .option-button.selected {
+            background-color: var(--info-color);
+            color: #ffffff;
+            border-color: var(--info-hover);
+            box-shadow: 0 4px 10px var(--info-shadow);
+        }
+
+        .option-button.correct {
+            background-color: var(--success-color);
+            color: #ffffff;
+            border-color: var(--success-hover);
+            box-shadow: 0 4px 10px var(--success-shadow);
+        }
+
+        .option-button.incorrect {
+            background-color: var(--danger-color);
+            color: #ffffff;
+            border-color: var(--danger-hover);
+            box-shadow: 0 4px 10px var(--danger-shadow);
+        }
+
+        /* Glow animation for options and spelling input */
+        .option-button.glow-green,
+        #spellingInput.glow-green {
+            animation: glowGreen 0.5s ease-in-out forwards;
+        }
+        .option-button.glow-red,
+        #spellingInput.glow-red {
+            animation: glowRed 0.5s ease-in-out forwards;
+        }
+
+        @keyframes glowGreen {
+            0% { box-shadow: 0 0 0px 0px var(--success-color); }
+            50% { box-shadow: 0 0 8px 3px var(--success-color); } /* Further reduced glow */
+            100% { box-shadow: 0 0 0px 0px var(--success-color); }
+        }
+        @keyframes glowRed {
+            0% { box-shadow: 0 0 0px 0px var(--danger-color); }
+            50% { box-shadow: 0 0 8px 3px var(--danger-color); } /* Further reduced glow */
+            100% { box-shadow: 0 0 0px 0px var(--danger-color); }
+        }
+
+
+        .options-container.disabled .option-button {
+            pointer-events: none;
+            cursor: default;
+        }
+
+        .nav-button {
+            background-color: var(--primary-button-bg);
+            color: #ffffff;
+            padding: 1rem 2rem; /* Medium size */
+            border-radius: 0.75rem; /* Rounded corners */
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px var(--primary-button-shadow); /* Proper shadow */
+            border: none;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background-color: var(--primary-button-hover);
+            transform: translateY(-2px); /* Subtle lift */
+            box-shadow: 0 6px 15px var(--primary-button-shadow); /* Stronger shadow on hover */
+        }
+
+        .nav-button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        #submitButton {
+            background-color: var(--info-color);
+            box-shadow: 0 4px 10px var(--info-shadow);
+        }
+
+        #submitButton:hover:not(:disabled) {
+            background-color: var(--info-hover);
+        }
+
+        .action-button {
+            background-color: var(--success-color);
+            padding: 1.2rem 3.5rem; /* Bigger size */
+            font-size: 1.6rem; /* Notable font size */
+            border-radius: 1rem; /* More rounded */
+            box-shadow: 0 8px 20px var(--success-shadow); /* More prominent shadow */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .action-button:hover {
+            background-color: var(--success-hover);
+            transform: translateY(-4px); /* More pronounced lift */
+            box-shadow: 0 12px 25px var(--success-shadow); /* Even stronger shadow */
+        }
+
+        .results-container h2 {
+            color: var(--primary-button-bg);
+        }
+
+        .timer-container {
+            background-color: var(--quiz-timer-bg);
+            color: var(--quiz-timer-text);
+            box-shadow: 0 2px 5px var(--quiz-timer-text);
+            margin-bottom: 2.5rem; /* Notable distance */
+        }
+
+        .create-set-container label, .manage-sets-container label {
+            color: var(--text-color);
+        }
+
+        .create-set-container input[type="text"],
+        .create-set-container select,
+        .create-set-container input[type="number"],
+        .manage-sets-container input[type="text"] {
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            background-color: var(--card-bg);
+            padding: 0.85rem; /* Slightly larger padding */
+            border-radius: 0.6rem; /* Slightly more rounded */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08); /* Inner shadow for depth */
+        }
+        .create-set-container input::placeholder,
+        .manage-sets-container input::placeholder {
+            color: var(--placeholder-text);
+        }
+
+
+        .create-set-container input[type="text"]:focus,
+        .create-set-container select:focus,
+        .create-set-container input[type="number"]:focus,
+        .manage-sets-container input[type="text"]:focus {
+            outline: none;
+            border-color: var(--info-color);
+            box-shadow: 0 0 0 4px var(--input-focus-shadow); /* Stronger focus glow */
+        }
+
+        .add-word-button {
+            background-color: var(--primary-button-bg);
+            padding: 0.9rem 2rem; /* Medium size */
+            border-radius: 0.75rem; /* Rounded corners */
+            box-shadow: 0 4px 10px var(--primary-button-shadow);
+        }
+
+        .add-word-button:hover {
+            background-color: var(--primary-button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px var(--primary-button-shadow);
+        }
+        .copy-paste-button {
+            background-color: var(--info-color);
+            padding: 0.9rem 2rem; /* Medium size */
+            border-radius: 0.75rem; /* Rounded corners */
+            box-shadow: 0 4px 10px var(--info-shadow);
+        }
+        .copy-paste-button:hover {
+            background-color: var(--info-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px var(--info-shadow);
+        }
+
+        .word-pairs-list, .quiz-sets-list {
+            margin-top: 2.5rem; /* More spacing */
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem; /* More padding */
+        }
+
+        .word-pairs-list h3, .quiz-sets-list h3 {
+            color: var(--text-color);
+        }
+
+        .word-pairs-list ul, .quiz-sets-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .word-pairs-list li, .quiz-sets-list li {
+            background-color: var(--list-item-bg);
+            border: 1px solid var(--list-item-border);
+            border-radius: 0.75rem; /* More rounded */
+            padding: 1rem 1.25rem; /* More padding */
+            margin-bottom: 0.85rem; /* More spacing */
+            font-size: 1rem; /* Slightly larger font */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.2s ease;
+        }
+        .quiz-sets-list li:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+            transform: translateY(-1px);
+        }
+
+        .word-pairs-list li span, .quiz-sets-list li span {
+            flex-grow: 1;
+            margin-right: 15px; /* More space */
+        }
+
+        .word-pairs-list li .remove-btn,
+        .quiz-sets-list li .action-btns button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            margin-left: 0.75rem; /* More space */
+            padding: 0.4rem 0.8rem; /* More padding */
+            border-radius: 0.5rem; /* More rounded */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .quiz-sets-list li .action-btns button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+
+        .word-pairs-list li .remove-btn {
+            color: white; /* Text color for remove button */
+            background-color: var(--danger-color);
+        }
+        .word-pairs-list li .remove-btn:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .quiz-sets-list li .action-btns .start-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+        .quiz-sets-list li .action-btns .start-btn:hover {
+            background-color: var(--success-hover);
+        }
+        .quiz-sets-list li .action-btns .edit-btn {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        .quiz-sets-list li .action-btns .edit-btn:hover {
+            background-color: var(--warning-hover);
+        }
+        .quiz-sets-list li .action-btns .delete-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .quiz-sets-list li .action-btns .delete-btn:hover {
+            background-color: var(--danger-hover);
+        }
+        .quiz-sets-list li .action-btns .rename-btn {
+            background-color: var(--info-color);
+            color: white;
+        }
+        .quiz-sets-list li .action-btns .rename-btn:hover {
+            background-color: var(--info-hover);
+        }
+        .quiz-sets-list li .action-btns .spelling-quiz-btn {
+            background-color: #9b59b6; /* Purple color */
+            color: white;
+        }
+        .quiz-sets-list li .action-btns .spelling-quiz-btn:hover {
+            background-color: #8e44ad; /* Darker purple */
+        }
+
+
+        /* Loading indicator */
+        #loadingSpinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-button-bg);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2.5rem; /* More padding */
+            border-radius: 1rem; /* More rounded */
+            box-shadow: 0 12px 30px var(--shadow-color); /* More prominent shadow */
+            max-width: 450px; /* Slightly wider */
+            width: 90%;
+            text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .modal-content h3 {
+            font-size: 1.8rem; /* Larger font */
+            font-weight: bold;
+            margin-bottom: 1.5rem; /* More spacing */
+            color: var(--text-color);
+        }
+
+        .modal-content p {
+            margin-bottom: 1.8rem; /* More spacing */
+            font-size: 1.1rem; /* Slightly larger text */
+            color: var(--text-color);
+        }
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 0.9rem; /* More padding */
+            margin-bottom: 1.2rem; /* More spacing */
+            border: 1px solid var(--input-border);
+            border-radius: 0.75rem; /* More rounded */
+            font-size: 1.1rem; /* Larger font */
+            box-sizing: border-box;
+            color: var(--text-color);
+            background-color: var(--card-bg);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .modal-content input::placeholder,
+        .modal-content textarea::placeholder {
+            color: var(--placeholder-text);
+        }
+        .modal-content textarea {
+            min-height: 150px; /* Larger text areas */
+            resize: vertical;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem; /* More gap */
+            margin-top: 1rem; /* Space from inputs */
+        }
+
+        .modal-buttons button {
+            padding: 0.9rem 1.8rem; /* Larger padding */
+            border-radius: 0.75rem; /* More rounded */
+            font-size: 1.1rem; /* Larger font */
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-buttons .confirm-btn {
+            background-color: var(--info-color);
+            color: white;
+        }
+        .modal-buttons .confirm-btn:hover {
+            background-color: var(--info-hover);
+        }
+        .modal-buttons .cancel-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .modal-buttons .cancel-btn:hover {
+            background-color: var(--danger-hover);
+        }
+        .modal-buttons .close-btn {
+            background-color: #6b7280;
+            color: white;
+        }
+        .modal-buttons .close-btn:hover {
+            background-color: #4b5563;
+        }
+
+        /* Top-right buttons */
+        .top-right-buttons {
+            position: absolute;
+            top: 25px; /* More space from top */
+            right: 25px; /* More space from right */
+            gap: 12px; /* More gap */
+            z-index: 500;
+        }
+        .top-right-buttons button {
+            background-color: var(--primary-button-bg);
+            color: white;
+            padding: 0.85rem; /* Slightly larger padding */
+            border-radius: 50%;
+            width: 45px; /* Slightly larger */
+            height: 45px; /* Slightly larger */
+            box-shadow: 0 3px 8px var(--primary-button-shadow); /* More prominent shadow */
+        }
+        .top-right-buttons button:hover {
+            background-color: var(--primary-button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px var(--primary-button-shadow);
+        }
+
+        /* Icon styling for top-right buttons */
+        .top-right-buttons svg {
+            width: 22px; /* Slightly larger icon */
+            height: 22px; /* Slightly larger icon */
+            fill: currentColor;
+        }
+
+        /* Spelling Quiz Specific Styles */
+        #spellingQuizModal .modal-content { /* Apply modal-content styles to spelling quiz modal */
+            max-width: 600px; /* Adjust max-width for spelling quiz content */
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #banglaMeaning {
+            font-size: 2rem; /* Larger font */
+            font-weight: 700; /* Bolder */
+            margin-top: 2.5rem; /* Notable distance from timer */
+            margin-bottom: 2.5rem; /* More space */
+        }
+        #spellingInput {
+            width: 85%; /* Slightly wider */
+            max-width: 450px; /* Larger max-width */
+            padding: 1.2rem; /* Larger padding */
+            font-size: 1.8rem; /* Larger font */
+            border-width: 3px; /* Thicker border */
+            border-radius: 1rem; /* More rounded */
+            box-shadow: 0 4px 10px var(--shadow-color); /* More prominent shadow */
+        }
+        #spellingInput:focus {
+            box-shadow: 0 0 0 5px var(--input-focus-shadow); /* Stronger focus glow */
+        }
+        #spellingPreview {
+            min-height: 1.8rem; /* Reserve more space */
+            margin-top: 0.8rem; /* More space */
+            font-size: 1.4rem; /* Larger font */
+            font-weight: 600; /* Bolder */
+            white-space: pre; /* Preserve spaces for accurate preview */
+        }
+        .preview-correct {
+            color: var(--success-color);
+        }
+        .preview-incorrect {
+            color: var(--danger-color);
+        }
+
+        /* Quiz Type Selection Modal Specific Styles */
+        #quizTypeSelectionModal .modal-content {
+            max-width: 500px; /* Wider for buttons */
+        }
+        #quizTypeSelectionModal .modal-buttons {
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 1rem; /* Space between stacked buttons */
+        }
+        #quizTypeSelectionModal .modal-buttons button {
+            width: 100%; /* Full width for stacked buttons */
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 1.5rem;
+                min-height: 450px;
+            }
+            .question-text {
+                font-size: var(--mcq-question-font-size); /* Use the CSS variable for font size */
+            }
+            .option-button, .nav-button, .add-word-button, .copy-paste-button {
+                font-size: 1rem;
+                padding: 0.75rem 1rem;
+            }
+            .action-button {
+                font-size: 1.25rem;
+                padding: 0.8rem 2rem;
+            }
+            .timer-container {
+                font-size: 1.2rem;
+            }
+            .create-set-container input[type="text"],
+            .create-set-container select,
+            .create-set-container input[type="number"],
+            .manage-sets-container input[type="text"] {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+            .quiz-sets-list li .action-btns {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+                margin-top: 0.5rem;
+            }
+            .quiz-sets-list li .action-btns button {
+                margin-left: 0;
+            }
+            .modal-content {
+                padding: 1.5rem;
+            }
+            .modal-content textarea {
+                min-height: 100px;
+            }
+            .top-right-buttons {
+                top: 10px;
+                right: 10px;
+                gap: 5px;
+            }
+            .top-right-buttons button {
+                width: 35px;
+                height: 35px;
+                padding: 0.5rem;
+            }
+            .top-right-buttons svg {
+                width: 18px;
+                height: 18px;
+            }
+            #banglaMeaning {
+                font-size: 1.5rem;
+            }
+            #spellingInput {
+                font-size: 1.2rem;
+                padding: 0.8rem;
+            }
+            #spellingPreview {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quiz-container {
+                padding: 1rem;
+                min-height: 400px;
+            }
+            .question-text {
+                font-size: var(--mcq-question-font-size); /* Use the CSS variable for font size */
+            }
+            .option-button, .nav-button, .add-word-button, .action-button, .copy-paste-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.8rem;
+            }
+            .nav-buttons-container {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .action-button {
+                font-size: 1rem;
+                padding: 0.7rem 1.5rem;
+            }
+            .timer-container {
+                font-size: 1rem;
+            }
+            .create-set-container input[type="text"],
+            .create-set-container select,
+            .create-set-container input[type="number"],
+            .manage-sets-container input[type="text"] {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+            .modal-content {
+                padding: 1rem;
+            }
+            .modal-content textarea {
+                min-height: 80px;
+            }
+            #banglaMeaning {
+                font-size: 1.2rem;
+            }
+            #spellingInput {
+                font-size: 1rem;
+                padding: 0.6rem;
+            }
+            #spellingPreview {
+                font-size: 0.9rem;
+            }
+        }
