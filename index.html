@@ -1,0 +1,217 @@
+<!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+
+
+
+    <!-- Top Right Buttons -->
+    <div class="top-right-buttons">
+        <button id="themeToggleButton" title="Toggle Light/Dark Mode">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.5 5.5 0 0 1-5.3-4.4c-.2-.84-.3-1.7-.3-2.6V3h-3zm0 2v4a7 7 0 0 0 7 7c0-2.05-1.02-3.9-2.6-5.07A9.006 9.006 0 0 0 12 5z"/>
+            </svg>
+        </button>
+        <button id="settingsButton" title="Settings">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19.4 12.98c.04-.32.06-.65.06-.98s-.02-.66-.06-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.99l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.5.42l-.38 2.65c-.61.26-1.17.59-1.69.99l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.32-.06.65-.06.98s-.02.66.06.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.31.61.22l2.49-1c.52.4 1.08.73 1.69.99l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.26 1.17-.59 1.69-.99l2.49 1c.22.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="hidden"></div>
+
+    <!-- Quiz App Container (for MCQ) -->
+    <div id="quizApp" class="quiz-container hidden">
+        <div id="quizContent">
+            <div class="timer-container" id="timerDisplay">Time: 00:00</div>
+            <div class="question-text mt-8" id="question"></div> <!-- Added mt-8 for spacing -->
+            <div class="options-container flex flex-col gap-6 mt-8" id="options"></div> <!-- Added gap-6 and mt-8 -->
+            <div class="nav-buttons-container flex justify-between mt-8 gap-4">
+                <!-- Navigation buttons are hidden for auto-advance quiz -->
+                <button id="prevButton" class="nav-button hidden" disabled>Previous</button>
+                <button id="nextButton" class="nav-button hidden">Next</button>
+                <button id="submitButton" class="nav-button hidden">Submit Quiz</button>
+            </div>
+        </div>
+
+        <div id="resultsContent" class="results-container hidden">
+            <h2>Quiz Results</h2>
+            <p>You scored <span id="scoreDisplay"></span> out of <span id="totalQuestionsDisplay"></span>!</p>
+            <button id="restartButton" class="nav-button mt-4">Back to Main Menu</button>
+        </div>
+    </div>
+
+    <!-- Spelling Quiz Modal (The actual quiz interface, now a direct child of body) -->
+    <div id="spellingQuizModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="timer-container" id="spellingTimerDisplay">Time: 00:00</div>
+            <div id="banglaMeaning" class="text-2xl font-semibold mt-8 mb-4"></div> <!-- Added mt-8 for spacing -->
+            <input type="text" id="spellingInput" placeholder="Type the English word here" class="w-full max-w-md p-4 text-center text-2xl border-2 rounded-lg focus:outline-none">
+            <div id="spellingPreview" class="mt-2 text-lg font-medium min-h-[1.5em]"></div>
+            <div class="modal-buttons mt-8">
+                <button id="spellingQuitButton" class="cancel-btn">Quit Spelling Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spelling Results Content (Moved out of spellingQuizModal, now a direct child of body) -->
+    <div id="spellingResultsContent" class="quiz-container results-container hidden">
+        <h2>Spelling Quiz Results</h2>
+        <p>You spelled <span id="spellingScoreDisplay"></span> words correctly out of <span id="spellingTotalQuestionsDisplay"></span>!</p>
+        <button id="spellingRestartButton" class="nav-button mt-4">Back to Main Menu</button>
+    </div>
+
+    <!-- Spelling Review Content (New Screen for listing mistakes) -->
+    <div id="spellingReviewContent" class="quiz-container results-container hidden">
+        <h2 class="text-3xl font-bold text-indigo-700 mb-6">Spelling Mistakes Review</h2>
+        <div id="spellingMistakesList" class="word-pairs-list mt-4">
+            <ul id="spellingMistakesListUl">
+                <!-- Mistakes will be listed here -->
+            </ul>
+            <p id="noSpellingMistakesMessage" class="text-gray-500 text-center mt-4 hidden">Great job! No spelling mistakes were recorded.</p>
+        </div>
+        <button id="spellingReviewRestartButton" class="nav-button mt-6">Back to Main Menu</button>
+    </div>
+
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="quiz-container flex flex-col items-center justify-center">
+        <h1 class="text-4xl font-extrabold text-indigo-700 mb-6">Vocabulary Quiz App</h1>
+        <p class="text-lg text-gray-600 mb-8 text-center max-w-md">Manage your vocabulary sets or start a quiz!</p>
+        <button id="manageSetsButton" class="action-button">Manage Quiz Sets</button>
+    </div>
+
+    <!-- Manage Quiz Sets Screen -->
+    <div id="manageSetsScreen" class="quiz-container manage-sets-container hidden">
+        <h2 class="text-3xl font-bold text-indigo-700 mb-6">Manage Your Quiz Sets</h2>
+
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-semibold text-gray-800">Your Sets</h3>
+            <button id="createNewSetButton" class="nav-button bg-green-500 hover:bg-green-600">Create New Set</button>
+        </div>
+
+        <div class="quiz-sets-list" id="quizSetsList">
+            <ul id="setsListUl">
+                <!-- Quiz sets will be loaded here -->
+            </ul>
+            <p id="noSetsMessage" class="text-gray-500 text-center mt-4 hidden">No quiz sets created yet. Click "Create New Set" to get started!</p>
+        </div>
+        <button id="backToStartFromManage" class="nav-button mt-6 bg-gray-600 hover:bg-gray-700">Back to Main Menu</button>
+    </div>
+
+    <!-- Create/Edit Quiz Set Screen -->
+    <div id="createEditSetScreen" class="quiz-container create-set-container hidden">
+        <h2 id="createEditSetTitle" class="text-3xl font-bold text-indigo-700 mb-6">Create New Quiz Set</h2>
+
+        <div class="mb-4">
+            <label for="setNameInput" class="block text-gray-700 text-sm font-bold mb-2">Set Name:</label>
+            <input type="text" id="setNameInput" placeholder="Enter quiz set name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4 flex gap-4">
+            <div class="flex-1">
+                <label for="englishWordInput" class="block text-gray-700 text-sm font-bold mb-2">English Word:</label>
+                <input type="text" id="englishWordInput" placeholder="Enter English word" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="flex-1">
+                <label for="banglaWordInput" class="block text-gray-700 text-sm font-bold mb-2">Bangla Word:</label>
+                <input type="text" id="banglaWordInput" placeholder="Enter Bangla word" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center flex-wrap gap-2">
+            <button id="addWordPairButton" class="add-word-button">Add Word Pair</button>
+            <button id="copyPasteInputButton" class="copy-paste-button">Copy-Paste Input</button>
+            <button id="saveSetButton" class="nav-button bg-green-500 hover:bg-green-600" disabled>Save Set</button>
+            <span id="saveButtonHint" class="text-sm text-red-500 ml-2"></span>
+        </div>
+
+        <div class="word-pairs-list" id="wordPairsList">
+            <h3>Word Pairs in this Set:</h3>
+            <ul id="wordPairsListUl">
+                <!-- Added word pairs will appear here -->
+            </ul>
+            <p id="noWordPairsMessage" class="text-gray-500 text-center mt-4 hidden">No word pairs added yet.</p>
+        </div>
+        <button id="backToManageFromCreateEdit" class="nav-button mt-6 bg-gray-600 hover:bg-gray-700">Back to Manage Sets</button>
+    </div>
+
+    <!-- Custom Modal for Alerts/Confirmations -->
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <input type="text" id="modalInput" class="hidden" placeholder="Enter new name">
+            <div class="modal-buttons">
+                <button id="modalConfirmBtn" class="confirm-btn hidden">Confirm</button>
+                <button id="modalCancelBtn" class="cancel-btn hidden">Cancel</button>
+                <button id="modalCloseBtn" class="close-btn hidden">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy-Paste Input Modal -->
+    <div id="copyPasteModal" class="modal-overlay hidden">
+        <div class="modal-content max-w-2xl">
+            <h3 class="text-2xl font-bold mb-4">Copy-Paste Word Pairs</h3>
+            <p class="text-gray-600 mb-4">Paste your English words on the left and Bangla words on the right. Each new line will be treated as a new word pair.</p>
+            <div class="flex gap-4 mb-4">
+                <div class="flex-1">
+                    <label for="englishPasteInput" class="block text-gray-700 text-sm font-bold mb-2">English Words:</label>
+                    <textarea id="englishPasteInput" placeholder="Word 1&#10;Word 2&#10;Word 3" class="w-full"></textarea>
+                </div>
+                <div class="flex-1">
+                    <label for="banglaPasteInput" class="block text-gray-700 text-sm font-bold mb-2">Bangla Words:</label>
+                    <textarea id="banglaPasteInput" placeholder="শব্দ 1&#10;শব্দ 2&#10;শব্দ 3" class="w-full"></textarea>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="processWordsButton" class="confirm-btn">Process Words</button>
+                <button id="closeCopyPasteModal" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Type Selection and Start Modal (New) -->
+    <div id="quizTypeSelectionModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4">Select Quiz Type & Time</h3>
+            <p class="text-gray-600 mb-4">Set a time limit for this quiz (in **minutes**). Enter 0 for no time limit.</p>
+            <input type="number" id="quizTypeSelectDurationInput" value="2" min="0" placeholder="e.g., 2 for 2 minutes" class="w-full mb-6">
+            <div class="modal-buttons">
+                <button id="startMCQQuizButton" class="confirm-btn">Start MCQ Quiz</button>
+                <button id="startSpellingQuizButton" class="confirm-btn bg-purple-600 hover:bg-purple-700">Start Spelling Quiz</button>
+                <button id="cancelQuizTypeSelection" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal (New) -->
+    <div id="settingsModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4">Settings</h3>
+            <div class="mb-4 text-left">
+                <label for="correctAudioInput" class="block text-gray-700 text-sm font-bold mb-2">Correct Answer Audio:</label>
+                <input type="file" id="correctAudioInput" accept="audio/*" class="w-full py-2 px-3 border rounded focus:outline-none focus:shadow-outline">
+                <p class="text-xs text-gray-500 mt-1">Current: <span id="correctAudioFileName">None</span></p>
+            </div>
+            <div class="mb-4 text-left">
+                <label for="incorrectAudioInput" class="block text-gray-700 text-sm font-bold mb-2">Incorrect Answer Audio:</label>
+                <input type="file" id="incorrectAudioInput" accept="audio/*" class="w-full py-2 px-3 border rounded focus:outline-none focus:shadow-outline">
+                <p class="text-xs text-gray-500 mt-1">Current: <span id="incorrectAudioFileName">None</span></p>
+            </div>
+            <!-- New Font Size Control -->
+            <div class="mb-4 text-left">
+                <label for="mcqFontSizeSlider" class="block text-gray-700 text-sm font-bold mb-2">MCQ Question Font Size: <span id="mcqFontSizeValue">10%</span></label>
+                <input type="range" id="mcqFontSizeSlider" min="1" max="100" value="10" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+            </div>
+            <div class="modal-buttons">
+                <button id="saveSettingsButton" class="confirm-btn">Save Settings</button>
+                <button id="closeSettingsModal" class="cancel-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDKs are removed as per request -->
